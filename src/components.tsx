@@ -1,0 +1,20 @@
+import { Award, BarChart3, Dumbbell, Home, ShieldCheck, Target, UserRound, type LucideIcon } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { useI18n } from './i18n';
+
+export function Wordmark({institutional=false}:{institutional?:boolean}) { return <div className="brand-wrap"><div className="wordmark" aria-label="KALIX">KALI<span>X</span></div>{institutional&&<div className="brand-sub">CALISTHENICS</div>}</div> }
+export function PageContainer({children,className=''}:{children:ReactNode;className?:string}) { return <main className={`page ${className}`}>{children}</main> }
+export function AppHeader({title,back=false,action}:{title?:string;back?:boolean;action?:ReactNode}) { const navigate=useNavigate(); return <header className="app-header">{back?<button className="icon-button" onClick={()=>navigate(-1)} aria-label="Voltar">←</button>:<Wordmark/>}<div className="header-title">{title}</div>{action??<span/>}</header> }
+export function PrimaryButton({children,onClick}:{children:ReactNode;onClick?:()=>void}) { return <button className="button primary" onClick={onClick}>{children}</button> }
+export function SecondaryButton({children,onClick}:{children:ReactNode;onClick?:()=>void}) { return <button className="button secondary" onClick={onClick}>{children}</button> }
+export function SectionHeader({eyebrow,title,action}:{eyebrow?:string;title:string;action?:ReactNode}) { return <div className="section-header"><div>{eyebrow&&<div className="eyebrow">{eyebrow}</div>}<h2>{title}</h2></div>{action}</div> }
+export function MetricCard({label,value,detail,onClick}:{label:string;value:string|number;detail?:string;onClick?:()=>void}) { return <button className="metric-card" onClick={onClick}><span>{label}</span><strong>{value}</strong>{detail&&<small>{detail}</small>}</button> }
+export function ProgressBar({value,max=100}:{value:number;max?:number}) { return <div className="progress-track" role="progressbar" aria-valuenow={value} aria-valuemax={max}><span style={{width:`${Math.min(100,value/max*100)}%`}}/></div> }
+export function WorkoutCard({title,meta,onStart}:{title:string;meta:string;onStart:()=>void}) { const {t}=useI18n(); return <article className="workout-card"><div className="workout-art"><div className="calisthenics-figure"/><div className="art-grid"/></div><div className="workout-content"><div className="eyebrow">{t('dashboard.todayWorkout')}</div><h2>{title}</h2><p>{meta}</p><PrimaryButton onClick={onStart}>{t('workout.start')} <span>→</span></PrimaryButton></div></article> }
+export function AchievementCard({title,current,target}:{title:string;current:number;target:number}) { return <article className="achievement-card"><div className="achievement-icon"><Target size={22}/></div><div className="grow"><strong>{title}</strong><ProgressBar value={current} max={target}/><small>{current}/{target}</small></div></article> }
+export function LevelBadge({children}:{children:ReactNode}) { return <span className="level-badge"><ShieldCheck size={14}/>{children}</span> }
+export function ScoreGauge({value}:{value:number}) { return <div className="score-gauge" style={{'--score':`${value/250*100}%`} as React.CSSProperties}><div><strong>{value}</strong><span>/ 250</span></div></div> }
+export function ExerciseCard({children}:{children:ReactNode}) { return <article className="exercise-card">{children}</article> }
+export function EmptyState({title,text,icon:Icon=Dumbbell}:{title:string;text:string;icon?:LucideIcon}) { return <div className="empty-state"><div className="empty-icon"><Icon/></div><h1>{title}</h1><p>{text}</p><span>EM BREVE</span></div> }
+export function BottomNavigation() { const {t}=useI18n(); const links=[['/today',Home,'navigation.today'],['/train',Dumbbell,'navigation.train'],['/skills',Award,'navigation.skills'],['/progress',BarChart3,'navigation.progress'],['/profile',UserRound,'navigation.profile']] as const; return <nav className="bottom-nav" aria-label="Navegação principal">{links.map(([to,Icon,key])=><NavLink key={to} to={to}><Icon/><span>{t(key)}</span></NavLink>)}</nav> }

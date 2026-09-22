@@ -15,6 +15,9 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 
 # Wrangler / Cloudflare
 .wrangler/
